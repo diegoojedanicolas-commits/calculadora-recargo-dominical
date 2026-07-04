@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de recargo dominical y festivo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f0f0;min-height:100vh;padding:16px}
+.card{background:#fff;border-radius:14px;max-width:480px;margin:0 auto;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.header{background:#c8102e;padding:20px 24px 18px}
+.header h1{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:3px}
+.header p{color:rgba(255,255,255,.75);font-size:12px;line-height:1.4}
+.body{padding:22px 24px 24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.field input,.field select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:13px 14px;font-size:16px;font-family:'Inter',sans-serif;color:#111;background:#fff;outline:none;transition:border-color .15s;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus{border-color:#c8102e}
+.field small{display:block;font-size:11px;color:#999;margin-top:5px;line-height:1.4}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toggle-block{display:flex;align-items:center;justify-content:space-between;background:#fafafa;border:2px solid #e8e8e8;border-radius:8px;padding:12px 14px;margin-bottom:16px;gap:14px}
+.toggle-text{font-size:13px;color:#555;line-height:1.4;flex:1}
+.toggle-text b{display:block;font-size:13px;font-weight:600;color:#111;margin-bottom:2px}
+.sw{position:relative;width:44px;height:25px;flex-shrink:0}
+.sw input{opacity:0;position:absolute;width:0;height:0}
+.sw-track{position:absolute;inset:0;background:#ccc;border-radius:13px;cursor:pointer;transition:.2s}
+.sw input:checked+.sw-track{background:#c8102e}
+.sw-track:after{content:'';position:absolute;width:19px;height:19px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked+.sw-track:after{transform:translateX(19px)}
+.nocturno-detail{display:none;margin-top:12px}
+.nocturno-detail.show{display:block}
+.btn-calc{display:block;width:100%;background:#c8102e;color:#fff;border:none;border-radius:10px;padding:17px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;letter-spacing:.2px;box-shadow:0 4px 14px rgba(200,16,46,.45);transition:background .15s,transform .1s,box-shadow .15s;margin-top:6px}
+.btn-calc:hover{background:#a50d25;box-shadow:0 6px 18px rgba(200,16,46,.5)}
+.btn-calc:active{background:#8a0b1f;transform:scale(.98);box-shadow:0 2px 8px rgba(200,16,46,.3)}
+.btn-reset{width:100%;background:transparent;color:#aaa;border:none;padding:10px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;margin-top:6px;text-decoration:underline;text-underline-offset:3px}
+.btn-reset:hover{color:#555}
+.result{display:none;border-top:1px solid #f0f0f0;margin-top:22px;padding-top:20px}
+.result.show{display:block}
+.rlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:8px}
+.rmain{font-size:42px;font-weight:700;color:#c8102e;line-height:1;margin-bottom:4px;letter-spacing:-1px}
+.rsub{font-size:13px;color:#888;margin-bottom:6px}
+.rbadge{display:inline-flex;align-items:center;gap:5px;background:#fff0f0;border:1px solid #f5c0c0;border-radius:6px;padding:5px 11px;font-size:12px;color:#9b0d22;font-weight:500;margin-bottom:18px}
+.breakdown{background:#fafafa;border-radius:8px;border:1px solid #ececec;overflow:hidden;margin-bottom:16px}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #ececec;font-size:13px}
+.brow:last-child{border-bottom:none}
+.brow.total{background:#111}
+.brow span:first-child{color:#777}
+.brow span:last-child{font-weight:600;color:#111}
+.brow.total span:first-child{color:#aaa;font-size:12px}
+.brow.total span:last-child{color:#fff;font-size:15px}
+.alertbox{display:none;background:#fff3cd;border-left:3px solid #ffc107;border-radius:6px;padding:10px 13px;font-size:12px;color:#664d03;line-height:1.5;margin-bottom:16px}
+.alertbox.show{display:block}
+.errorbox{display:none;background:#fde8ec;border-left:3px solid #c8102e;border-radius:6px;padding:10px 13px;font-size:12px;color:#7a0c1e;line-height:1.5;margin-bottom:16px}
+.errorbox.show{display:block}
+.info-ref{font-size:11px;color:#bbb;line-height:1.6;padding-top:10px;border-top:1px solid #f0f0f0}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h1>Calculadora de recargo dominical y festivo 2026</h1>
+    <p>Recargo vigente: 90 % · Aplica desde el 1 de julio de 2026</p>
+  </div>
+  <div class="body">
+    <div class="errorbox" id="errorBox"></div>
+    <div class="alertbox" id="alertBox"></div>
+
+    <div class="field">
+      <label>Salario básico mensual</label>
+      <input type="number" id="salario" placeholder="Ej: 1750905" min="0" step="1" inputmode="numeric">
+      <small>Solo el salario base, sin auxilio de transporte ni bonificaciones.</small>
+    </div>
+
+    <div class="field">
+      <label>Jornada semanal vigente</label>
+      <select id="jornada">
+        <option value="44">44 horas (vigente hasta el 14 de julio de 2026)</option>
+        <option value="42">42 horas (vigente desde el 15 de julio de 2026)</option>
+      </select>
+      <small>Define el valor de la hora ordinaria. Cambia automáticamente el divisor mensual.</small>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Horas trabajadas</label>
+        <input type="number" id="horas" placeholder="Ej: 8" min="0.5" max="24" step="0.5" inputmode="decimal">
+        <small>En el domingo o festivo</small>
+      </div>
+      <div class="field">
+        <label>Frecuencia en el mes</label>
+        <select id="frecuencia">
+          <option value="ocasional">1 o 2 domingos</option>
+          <option value="habitual">3 o más domingos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toggle-block">
+      <div class="toggle-text">
+        <b>¿Alguna hora fue entre 7:00 p.m. y 6:00 a.m.?</b>
+        Esas horas suman además el recargo nocturno del 35 %
+      </div>
+      <label class="sw">
+        <input type="checkbox" id="nocturnoCheck" onchange="toggleNocturno()">
+        <span class="sw-track"></span>
+      </label>
+    </div>
+
+    <div class="field nocturno-detail" id="nocturnoDetail">
+      <label>Horas trabajadas en horario nocturno</label>
+      <input type="number" id="horasNocturnas" placeholder="Ej: 3" min="0" max="24" step="0.5" inputmode="decimal">
+      <small>Deben estar incluidas dentro del total de horas trabajadas arriba.</small>
+    </div>
+
+    <button class="btn-calc" onclick="calcular()">Calcular recargo</button>
+    <button class="btn-reset" onclick="resetear()">Limpiar campos</button>
+
+    <div class="result" id="result">
+      <div class="rlabel" id="rLabel">Total a recibir por el día</div>
+      <div class="rmain" id="rMain"></div>
+      <div class="rsub" id="rSub"></div>
+      <div class="rbadge" id="rBadge">Recargo dominical/festivo: 90 %</div>
+      <div class="breakdown" id="breakdown"></div>
+      <div class="info-ref" id="infoRef">
+        Fórmula: Valor hora ordinaria = Salario mensual / (horas semanales × 5)<br>
+        Recargo dominical/festivo = Valor hora ordinaria × horas trabajadas × 90 %<br>
+        Recargo nocturno (si aplica) = Valor hora ordinaria × horas nocturnas × 35 %<br>
+        Base legal: Art. 179 CST, modificado por la Ley 2466 de 2025 (implementación gradual: 80 % desde jul. 2025, 90 % desde jul. 2026, 100 % desde jul. 2027).
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleNocturno(){
+  var checked = document.getElementById('nocturnoCheck').checked;
+  document.getElementById('nocturnoDetail').className = checked ? 'field nocturno-detail show' : 'field nocturno-detail';
+  if(!checked) document.getElementById('horasNocturnas').value = '';
+}
+
+function fmt(n){return '$'+Math.round(n).toLocaleString('es-CO');}
+
+function calcular(){
+  var sal = parseFloat(document.getElementById('salario').value) || 0;
+  var jornadaSemanal = parseFloat(document.getElementById('jornada').value);
+  var horas = parseFloat(document.getElementById('horas').value) || 0;
+  var frecuencia = document.getElementById('frecuencia').value;
+  var conNocturno = document.getElementById('nocturnoCheck').checked;
+  var horasNocturnas = conNocturno ? (parseFloat(document.getElementById('horasNocturnas').value) || 0) : 0;
+
+  var errBox = document.getElementById('errorBox');
+  var warnBox = document.getElementById('alertBox');
+  errBox.className = 'errorbox';
+  warnBox.className = 'alertbox';
+
+  if(sal <= 0){ errBox.innerHTML = 'Ingrese el salario básico mensual.'; errBox.className = 'errorbox show'; return; }
+  if(horas <= 0 || horas > 24){ errBox.innerHTML = 'Las horas trabajadas deben estar entre 0.5 y 24.'; errBox.className = 'errorbox show'; return; }
+  if(conNocturno && horasNocturnas > horas){ errBox.innerHTML = 'Las horas nocturnas no pueden ser más que el total de horas trabajadas.'; errBox.className = 'errorbox show'; return; }
+
+  var divisor = jornadaSemanal * 5; // 44h -> 220, 42h -> 210
+  var valorHora = sal / divisor;
+  var pagoOrdinario = valorHora * horas;
+  var recargoDominical = valorHora * horas * 0.90;
+  var recargoNocturno = conNocturno ? (valorHora * horasNocturnas * 0.35) : 0;
+  var totalRecargos = recargoDominical + recargoNocturno;
+  var totalDia = pagoOrdinario + totalRecargos;
+
+  document.getElementById('rMain').textContent = fmt(totalDia);
+  document.getElementById('rSub').textContent = 'Por ' + horas + ' hora' + (horas === 1 ? '' : 's') + ' trabajadas en día de descanso obligatorio';
+
+  var rows = '';
+  rows += '<div class="brow"><span>Valor hora ordinaria</span><span>' + fmt(valorHora) + '</span></div>';
+  rows += '<div class="brow"><span>Pago ordinario (' + horas + ' h)</span><span>' + fmt(pagoOrdinario) + '</span></div>';
+  rows += '<div class="brow"><span>Recargo dominical/festivo (90%)</span><span>' + fmt(recargoDominical) + '</span></div>';
+  if(conNocturno){
+    rows += '<div class="brow"><span>Recargo nocturno (35%, ' + horasNocturnas + ' h)</span><span>' + fmt(recargoNocturno) + '</span></div>';
+  }
+  rows += '<div class="brow total"><span>Total a recibir por el día</span><span>' + fmt(totalDia) + '</span></div>';
+  document.getElementById('breakdown').innerHTML = rows;
+
+  if(frecuencia === 'habitual'){
+    warnBox.innerHTML = 'Trabajar 3 o más domingos en el mes se considera dominical habitual: además de este recargo, la empresa debe dar un día de descanso compensatorio remunerado (o su equivalente en dinero), aparte del pago aquí calculado.';
+    warnBox.className = 'alertbox show';
+  }
+
+  var r = document.getElementById('result');
+  r.className = 'result show';
+  setTimeout(function(){ r.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+}
+
+function resetear(){
+  document.getElementById('salario').value = '';
+  document.getElementById('jornada').value = '44';
+  document.getElementById('horas').value = '';
+  document.getElementById('frecuencia').value = 'ocasional';
+  document.getElementById('nocturnoCheck').checked = false;
+  document.getElementById('nocturnoDetail').className = 'field nocturno-detail';
+  document.getElementById('horasNocturnas').value = '';
+  document.getElementById('result').className = 'result';
+  document.getElementById('errorBox').className = 'errorbox';
+  document.getElementById('alertBox').className = 'alertbox';
+}
+</script>
+</body>
+</html>
